@@ -38,14 +38,14 @@ export default class SelectComponent extends Component {
                 <div className='select'>
                     <label className='label'>Select X-axis field:</label>
                     <select onChange={this.onChangeXValue} defaultValue={defaultValue} className='select-tag'>
-                        <option value='' disabled>None</option>
+                        <option value='' disabled>Select</option>
                         {selectOptions}
                     </select>
                 </div>
                 <div className='select'>
                     <label className='label'>Select Y-axis field:</label>
                     <select onChange={this.onChangeYValue} defaultValue={defaultValue} className='select-tag'>
-                        <option value='' disabled>None</option>
+                        <option value='' disabled>Select</option>
                         {selectOptions}
                     </select>
                 </div>
