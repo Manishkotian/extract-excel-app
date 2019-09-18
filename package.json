@@ -3,6 +3,8 @@
   "name": "extract-excel-app",
   "version": "0.1.0",
   "private": true,
+  "productName": "extract-excel-app",
+  "description": "Application for extracting excel data",
   "dependencies": {
     "electron": "^6.0.9",
     "electron-packager": "^14.0.6",
@@ -18,7 +20,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "electron": "electron .",
-    "package-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=ia32 --icon=src/assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"ExtractExcelApp\""
+    "package-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=x64 --icon=src/assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"extract-excel-app\"",
+    "create-installer-win": "node installers/windows/createinstaller.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -34,5 +37,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "electron-winstaller": "^4.0.0"
   }
 }
