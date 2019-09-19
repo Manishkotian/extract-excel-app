@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
 import { ExcelRenderer} from 'react-excel-renderer';
-import ExcelContent from './excel-content.js';
+// import ExcelContent from './excel-content.js';
 import ChartComponnet from './chart/chart';
 import SelectComponent from './select-component.js'
 export default class App extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-		fileNameError: false
+		fileNameError: false,
+		countOf: false
 		}
 	}
 
@@ -68,8 +69,11 @@ export default class App extends Component {
 
 	setXValue = (value) => {
 		this.setState({ xValue: value, graphData: undefined }, () => {
-			const { xValue, yValue } = this.state
-			if(xValue && yValue) {
+			const { xValue, yValue, countOf } = this.state
+			if (xValue && countOf) {
+				this.setState({graphData: undefined})
+				this.getCountOfValue()
+			} else if(xValue && yValue) {
 				this.setState({graphData: undefined})
 				this.constructGraphData()
 			}
@@ -102,8 +106,39 @@ export default class App extends Component {
 		this.setState({ graphData })
 	}
 
+	onChangeCountOfValue = (value) => {
+		this.setState({ countOf: value, graphData: undefined }, () => {
+			if(this.state.countOf) {
+				this.getCountOfValue()
+			}
+		})
+	}
+	
+	getCountOfValue = () => {
+		const { xValue, extractedData } = this.state
+		if (xValue) {
+			let totalXValuesArray = []
+			let graphData = [{key: 'GraphData', values: []}]
+			extractedData.map(dataValue => {
+				if (!totalXValuesArray.length || !totalXValuesArray.includes(dataValue[xValue])) {
+					let value = { x: dataValue[xValue], y: 0 }
+					totalXValuesArray.push(dataValue[xValue])
+					extractedData.map(data => {
+						if(dataValue[xValue] === data[xValue]) {
+							value.y = value.y + 1
+						}
+						return ''
+					})
+					graphData[0].values.push(value)
+				}				
+				return ''
+			})
+			this.setState({ graphData })
+		}
+	}
+
   render () {
-	const { fileNameError, extractedData, excelHeaders, graphData, graphType } = this.state
+	const { fileNameError, excelHeaders, graphData, graphType, countOf } = this.state
     return(
 		<div className="extract-excel-view">
 			<div className='select-file-view'>
@@ -120,9 +155,11 @@ export default class App extends Component {
 			/>} */}
 			{excelHeaders && <SelectComponent
 				excelHeaders={excelHeaders}
+				countOf={countOf}
 				xValueSelectedCallback={(value) => this.setXValue(value)}
 				yValueSelectedCallback={(value) => this.setYValue(value)}
 				onGraphTypeSelectedCallback={(value) => this.setGraphType(value)}
+				countOfSelectedCallback={(value) => this.onChangeCountOfValue(value)}
 			/>}
 			{ graphData && graphType && <ChartComponnet
 				data={graphData}

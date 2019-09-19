@@ -7,7 +7,7 @@ export default class SelectComponent extends Component {
         this.state = {
             graphTypes: ["barchart", "linechart", "areachart", "scatterchart", "linechart"],
             defaultGraphType: 'barchart',
-            defaultValue: ''
+            defaultValue: '',
         }
     }
 
@@ -17,6 +17,11 @@ export default class SelectComponent extends Component {
 
     onChangeYValue = (event) => {
         this.props.yValueSelectedCallback(event.target.value)
+    }
+
+    onChangeCountOf = () => {
+        const { countOf } = this.props
+        this.props.countOfSelectedCallback(!countOf)
     }
 
     onChangeGraphTYpe = (event) => {
@@ -29,7 +34,7 @@ export default class SelectComponent extends Component {
     }
 
     render () {
-        const { excelHeaders } = this.props
+        const { excelHeaders, countOf } = this.props
         const { graphTypes, defaultValue } = this.state
         const selectOptions = excelHeaders.map((data, index) => <option key={index} value={data}>{data}</option>)
         const graphTypeOptions =  graphTypes.map((data, index) => <option key={index} value={data}>{data}</option>)
@@ -43,12 +48,16 @@ export default class SelectComponent extends Component {
                     </select>
                 </div>
                 <div className='select'>
+                    <label className='label'>CountOf:</label>
+                    <input type='checkbox' checked={countOf} onChange={this.onChangeCountOf}/>
+                </div>
+                {!countOf && <div className='select'>
                     <label className='label'>Select Y-axis field:</label>
                     <select onChange={this.onChangeYValue} defaultValue={defaultValue} className='select-tag'>
                         <option value='' disabled>Select</option>
                         {selectOptions}
                     </select>
-                </div>
+                </div>}
                 <div className='select'>
                     <label className='label'>Select graph type:</label>
                     <select onChange={this.onChangeGraphTYpe} className='select-tag'>
